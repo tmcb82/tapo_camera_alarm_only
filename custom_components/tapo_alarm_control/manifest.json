@@ -1,0 +1,36 @@
+{
+  "domain": "tapo_alarm_control",
+  "name": "Tapo Camera Alarm Control",
+  "documentation": "https://github.com/tmcb82/tapo_camera_alarm_only",
+  "codeowners": [],
+  "version": "1.0.1",
+  "requirements": [
+    "pytapo==3.4.34",
+    "python-kasa[speedups]>=0.10.2"
+  ],
+  "dependencies": [
+    "ffmpeg"
+  ],
+  "config_flow": true,
+  "homeassistant": "2026.9.0",
+  "dhcp": [
+    {
+      "hostname": "c[0-9][0-9][0-9]*_*"
+    },
+    {
+      "hostname": "d[0-9][0-9][0-9]*_*"
+    },
+    {
+      "hostname": "tc[0-9][0-9]*_*"
+    },
+    {
+      "hostname": "d[0-9][0-9][0-9]*c_*"
+    },
+    {
+      "hostname": "h[0-9][0-9][0-9]*_*"
+    }
+  ],
+  "loggers": [
+    "custom_components.tapo_alarm_control"
+  ]
+}
