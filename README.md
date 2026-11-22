@@ -1,6 +1,6 @@
 # Tapo Camera Alarm Control
 
-Version 1.0.1 - [github.com/tmcb82/tapo_camera_alarm_only](https://github.com/tmcb82/tapo_camera_alarm_only)
+Version 1.0.2 - [github.com/tmcb82/tapo_camera_alarm_only](https://github.com/tmcb82/tapo_camera_alarm_only)
 
 A slimmed-down, **unofficial modified version** of
 [JurajNyiri/HomeAssistant-Tapo-Control](https://github.com/JurajNyiri/HomeAssistant-Tapo-Control)
@@ -19,7 +19,7 @@ everything else.
 | `<device> Siren` | `siren` |
 | `<device> Manual Alarm Start` | `button` |
 | `<device> Manual Alarm Stop` | `button` |
-| `<device> Cloud Account` | `binary_sensor` (diagnostic, new in this version) |
+| `<device> TP-Link Cloud` | `binary_sensor` (diagnostic, new in this version) |
 
 The entity code and the capability detection for the siren and the two buttons are unchanged from upstream. Hub (H100/H200) child
 devices that have a siren are still supported.
@@ -27,16 +27,16 @@ devices that have a siren are still supported.
 **Signing in**
 
 - Adding a device: IP + control port, then the Camera Account (the third-party account created in the Tapo app). Both
-  username and password are required, and they are always verified against the RTSP stream. Then the Cloud Account
+  username and password are required, and they are always verified against the RTSP stream. Then the TP-Link Cloud
   password (admin), which is required because the alarm relies on it, and is verified against the device. KLAP devices
   (TP-Link account e-mail + password) and DHCP discovery are supported as well.
-- Re-authentication for both the Camera Account and the Cloud Account
-- Options flow: change IP / port / Camera Account / Cloud Account password, and the polling intervals
+- Re-authentication for both the Camera Account and TP-Link Cloud
+- Options flow: change IP / port / Camera Account / TP-Link Cloud password, and the polling intervals
 - `transport_method` override in `configuration.yaml`, under the `tapo_alarm_control:` key
 
-## Cloud Account sensor
+## TP-Link Cloud sensor
 
-`<device> Cloud Account` is a diagnostic binary sensor that does not exist in the original integration.
+`<device> TP-Link Cloud` is a diagnostic binary sensor that does not exist in the original integration.
 
 - **On** when the last poll of the device succeeded: the camera accepted the stored login (the cloud password) and
   answered.
@@ -48,13 +48,13 @@ devices that have a siren are still supported.
 - After four failed polls in a row because of an invalid login, the integration stops polling and starts Home
   Assistant's re-authentication flow, so a wrong password cannot keep hitting the camera. The sensor stays off until
   you re-authenticate.
-- The "cloud" in the name is the cloud account login, which the camera checks locally. The sensor does **not** report
-  whether the camera can reach TP-Link's servers.
+- Despite the name, it reflects the TP-Link cloud login (the cloud password), which the camera checks locally. It does
+  **not** report whether the camera can reach TP-Link's servers.
 
 ## What was removed
 
 Every other entity and everything that only existed to serve it: camera streams, switches, selects, numbers, lights,
-sensors, binary sensors (including ONVIF motion events and webhooks; only the new Cloud Account sensor exists), media player, update entity, the media source and
+sensors, binary sensors (including ONVIF motion events and webhooks; only the new TP-Link Cloud sensor exists), media player, update entity, the media source and
 recording sync, time sync, sound detection, the Reboot / Format SD Card / Sync Time / PTZ / Calibrate / Play Chime
 buttons, the `save_preset`, `delete_preset` and `set_record_plan` services, and the matching options.
 
@@ -92,6 +92,12 @@ scratch and nothing is shared with, or migrated from, the original integration.
   closed" otherwise
 
 Make sure Third-Party Compatibility is on in the Tapo app (**Me -> Tapo Lab -> Third-Party Compatibility**).
+
+## Icon
+
+The icon and logo in `custom_components/tapo_alarm_control/brand/` are the Tapo images the original integration uses in the
+Home Assistant brands repository, copied unchanged. Tapo and TP-Link are trademarks of TP-Link, and this project is not
+affiliated with TP-Link. They need Home Assistant 2026.3 or newer, which the manifest already requires.
 
 ## License and attribution
 
