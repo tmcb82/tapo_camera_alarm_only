@@ -21,13 +21,13 @@ async def async_setup_entry(
 
     binarySensors = []
     if not entry["isChild"]:
-        LOGGER.debug("Adding tapoCloudAccountBinarySensor...")
-        binarySensors.append(TapoCloudAccountBinarySensor(entry, hass, config_entry))
+        LOGGER.debug("Adding tapoCloudBinarySensor...")
+        binarySensors.append(TapoCloudBinarySensor(entry, hass, config_entry))
 
     async_add_entities(binarySensors)
 
 
-class TapoCloudAccountBinarySensor(TapoBinarySensorEntity):
+class TapoCloudBinarySensor(TapoBinarySensorEntity):
     """Reports whether the last poll of the device succeeded.
 
     The state comes from the regular data update, so this entity does not send
@@ -46,7 +46,7 @@ class TapoCloudAccountBinarySensor(TapoBinarySensorEntity):
     ) -> None:
         TapoBinarySensorEntity.__init__(
             self,
-            "Cloud Account",
+            "TP-Link Cloud",
             entry,
             hass,
             config_entry,

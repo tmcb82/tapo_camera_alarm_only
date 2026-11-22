@@ -228,7 +228,7 @@ class FlowHandler(ConfigFlow):
             cloudPassword = user_input[CLOUD_PASSWORD]
             try:
                 LOGGER.debug(
-                    "[REAUTH][%s] Testing control of camera using Cloud Account.",
+                    "[REAUTH][%s] Testing control of camera using TP-Link Cloud.",
                     tapoHost,
                 )
                 await self.hass.async_add_executor_job(
@@ -244,7 +244,7 @@ class FlowHandler(ConfigFlow):
                     self.hass,
                 )
                 LOGGER.debug(
-                    "[REAUTH][%s] Cloud Account works for control.",
+                    "[REAUTH][%s] TP-Link Cloud works for control.",
                     tapoHost,
                 )
                 allConfigData = {**self.reauth_entry.data}

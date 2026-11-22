@@ -3,7 +3,7 @@
   "name": "Tapo Camera Alarm Control",
   "documentation": "https://github.com/tmcb82/tapo_camera_alarm_only",
   "codeowners": [],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "requirements": [
     "pytapo==3.4.34",
     "python-kasa[speedups]>=0.10.2"
