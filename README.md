@@ -1,10 +1,10 @@
 # Tapo Camera Alarm Control
 
-Version 1.0.2 - [github.com/tmcb82/tapo_camera_alarm_only](https://github.com/tmcb82/tapo_camera_alarm_only)
+Version 1.0.4 - [github.com/tmcb82/tapo_camera_alarm_only](https://github.com/tmcb82/tapo_camera_alarm_only)
 
 A slimmed-down, **unofficial modified version** of
 [JurajNyiri/HomeAssistant-Tapo-Control](https://github.com/JurajNyiri/HomeAssistant-Tapo-Control)
-by Juraj Nyiri and contributors (based on upstream commit `16e2e71`, integration version 7.3.1). Almost all of the
+by Juraj Nyiri and contributors (based on upstream version 7.3.5, commit `a1e0f19`). Almost all of the
 code, including everything that talks to the cameras, is their work.
 
 It keeps the sign-in machinery and three entities from the original, adds one diagnostic sensor of its own, and removes
@@ -82,6 +82,9 @@ scratch and nothing is shared with, or migrated from, the original integration.
   Assistant would add `_2` to the entity IDs of one of them.
 - If you want to replace the original for a device, remove that device's entry from the original integration first, or
   disable its entities.
+- Both integrations share one `pytapo` library. This version accepts `pytapo` 3.4.37 up to (not including) 3.5, which
+  covers the original 7.3.5 (3.4.37) and 7.3.6 (3.4.38). Keep the original at 7.3.5 or newer: older versions need an
+  older `pytapo`, and Home Assistant would then downgrade it for one of the two integrations.
 - `ffmpeg` is the only Home Assistant dependency, because the Camera Account is verified against the RTSP stream during
   sign-in. The `stream`, `onvif` and `network` dependencies and `aiortc` are not required.
 
@@ -92,6 +95,33 @@ scratch and nothing is shared with, or migrated from, the original integration.
   closed" otherwise
 
 Make sure Third-Party Compatibility is on in the Tapo app (**Me -> Tapo Lab -> Third-Party Compatibility**).
+
+## Changes
+
+**1.0.4** (found by running the integration inside a real Home Assistant with a simulated camera)
+- The siren shows the real state of the camera when the camera reports it. An alarm started from the Tapo app, or ended
+  by the camera, used to be ignored (the siren only knew what Home Assistant had last told it).
+- When the camera cannot be reached or rejects the login, the siren and the Manual Alarm buttons now say so. Before,
+  they claimed "Camera does not support triggering the siren." They also stop after the first failed attempt instead of
+  sending three requests, so a press with wrong credentials costs one failed login instead of three.
+- KLAP devices (chimes) can be re-authenticated. Their re-authentication used to ask for a cloud password and could
+  never succeed. Suspended logins on those devices now show a readable message instead of `temporary_suspension`.
+- The options can no longer remove the TP-Link Cloud password, which the setup requires. Before, this was possible on
+  cameras whose camera account can control the siren.
+- Reloading the integration no longer leaves a Home Assistant stop listener behind. The update coordinator receives its
+  config entry explicitly, and the port checks close their sockets.
+
+**1.0.3**
+- Merged the applicable changes of upstream 7.3.2 to 7.3.5: the setup and re-authentication flows now run their port
+  checks off Home Assistant's event loop (an unreachable or firewalled device used to freeze Home Assistant for up to
+  3 seconds per check), and the `pytapo` requirement moved from exactly 3.4.34 to 3.4.37 or newer (below 3.5). The
+  other upstream changes (media sync, WebRTC, the select fix) are for features that are not part of this integration.
+- Timestamps use the real UTC clock. The old calculation was off by the host's UTC offset, which showed a wrong time in the
+  `last_successful_poll` attribute and could pause polling for about an hour when daylight saving time starts.
+- A failing hub child device now stops polling for the whole entry, like the hub itself does, so bad credentials
+  cannot keep being sent.
+- The RTSP debug log no longer shows parts of a password when it overlaps with the username.
+- Credential change detection uses SHA-256 instead of MD5.
 
 ## Icon
 
